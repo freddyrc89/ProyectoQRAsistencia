@@ -65,4 +65,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    // Compose
+    implementation ("androidx.activity:activity-compose:1.8.2")
+    implementation ("androidx.compose.ui:ui:1.6.1")
+    implementation ("androidx.compose.material:material:1.6.1")
+    implementation ("androidx.compose.ui:ui-tooling-preview:1.6.1")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation ("androidx.compose.ui:ui-tooling:1.6.1")
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
