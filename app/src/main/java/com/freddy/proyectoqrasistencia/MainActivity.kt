@@ -2,7 +2,6 @@ package com.freddy.proyectoqrasistencia
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.os.CountDownTimer
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,18 +16,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.freddy.proyectoqrasistencia.ui.theme.ProyectoQRAsistenciaTheme
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+//        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         enableEdgeToEdge()
         setContent {
             QRScreen()
@@ -45,22 +45,10 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun QRScreen() {
-    var timeLeft by remember { mutableStateOf(180) } // 3 minutos en segundos
-    var showQR by remember { mutableStateOf(false) }
-    var showData by remember { mutableStateOf(false) }
-    val timer = remember {
-        object : CountDownTimer(180_000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                timeLeft = (millisUntilFinished / 1000).toInt()
-            }
-            override fun onFinish() {
-                showQR = false
-                showData = false
-                timeLeft = 180
-            }
-        }
-    }
+fun QRScreen(viewModel: QRViewModel = viewModel()) {
+    val timeLeft by viewModel.timeLeft.collectAsState()
+    val showQR by viewModel.showQR.collectAsState()
+    val showData by viewModel.showData.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -84,11 +72,7 @@ fun QRScreen() {
 
         // Botón/Datos
         if (!showData) {
-            Button(onClick = {
-                showQR = true
-                showData = true
-                timer.start()
-            }) {
+            Button(onClick = {viewModel.startCountdown()}) {
                 Text("Mostrar Datos")
             }
         } else {
@@ -103,7 +87,7 @@ fun QRScreen() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, device = "spec:parent=pixel_5")
 @Composable
 fun GreetingPreview() {
     ProyectoQRAsistenciaTheme {
