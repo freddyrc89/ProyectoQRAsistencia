@@ -79,4 +79,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    //QR
+    implementation("com.google.zxing:core:3.5.2")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 }

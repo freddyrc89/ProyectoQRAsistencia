@@ -1,6 +1,8 @@
 package com.freddy.proyectoqrasistencia
 
 import android.content.pm.ActivityInfo
+import android.graphics.Bitmap
+import androidx.compose.foundation.Image
 import android.os.Bundle
 
 import androidx.activity.ComponentActivity
@@ -19,6 +21,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -37,17 +40,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Composable
 fun QRScreen(viewModel: QRViewModel = viewModel()) {
     val timeLeft by viewModel.timeLeft.collectAsState()
     val showQR by viewModel.showQR.collectAsState()
+    var qrBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -63,17 +59,28 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
 
         // Codigo QR
         if (showQR) {
-            Box(modifier = Modifier.size(200.dp)) {
-                Text("QR", fontSize = 24.sp)
-
+            qrBitmap?.let { bitmap ->
+                Image(
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = "Código QR",
+                    modifier = Modifier.size(200.dp)
+                )
             }
+//            Box(modifier = Modifier.size(200.dp)) {
+//                Text("QR", fontSize = 24.sp)
+//
+//            }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
         // Botón/Datos
         if (!showQR) {
-            Button(onClick = { viewModel.startCountdown() }) {
+            Button(onClick = {
+                viewModel.startCountdown();
+                qrBitmap = generarQR("https://mi-sistema.com/verificacion?id=12345")
+            })
+            {
                 Text("Generar QR")
             }
         } else {
