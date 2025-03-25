@@ -53,7 +53,7 @@ fun Titulo() {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "Registro de Visitante",
+                text = "Registro de Invitado",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )

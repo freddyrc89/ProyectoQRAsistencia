@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.freddy.proyectoqrasistencia.ui.screens.RegistroScreen
 import com.freddy.proyectoqrasistencia.ui.theme.ProyectoQRAsistenciaTheme
 
-class RegistroVisitas : ComponentActivity() {
+class RegistroInvitado : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -29,7 +29,7 @@ class RegistroVisitas : ComponentActivity() {
 
 @Preview(showBackground = true)
 @Composable
-fun RegistroVisitasPreview() {
+fun RegistroInvitadoPreview() {
     ProyectoQRAsistenciaTheme {
         RegistroScreen()
     }
