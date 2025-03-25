@@ -48,7 +48,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 fun QRScreen(viewModel: QRViewModel = viewModel()) {
     val timeLeft by viewModel.timeLeft.collectAsState()
     val showQR by viewModel.showQR.collectAsState()
-    val showData by viewModel.showData.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -56,7 +55,9 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
         verticalArrangement = Arrangement.Center
     ) {
         // Contador
-        Text("Tiempo restante: ${timeLeft}s", fontSize = 20.sp)
+        if (showQR) {
+            Text("Tiempo restante: ${timeLeft}s", fontSize = 20.sp)
+        }
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -71,9 +72,9 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
         Spacer(modifier = Modifier.height(20.dp))
 
         // Botón/Datos
-        if (!showData) {
-            Button(onClick = {viewModel.startCountdown()}) {
-                Text("Mostrar Datos")
+        if (!showQR) {
+            Button(onClick = { viewModel.startCountdown() }) {
+                Text("Generar QR")
             }
         } else {
             Column(
