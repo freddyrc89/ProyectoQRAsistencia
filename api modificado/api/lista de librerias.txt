@@ -26,7 +26,24 @@ pip install -r requirements.txt
 pip install mysql-connector-python
 
 
-PS C:\Users\GANDY\OneDrive - SENATI\Documentos\Proyectos-apis>    
+PS C:\Users\GANDY\OneDrive - SENATI\Documentos\Proyectos-apis>  
+
+
+
+
+/*{   "dni": "1997773",
+    "nombre": "Wason", 
+    "password": "124d455"
+}*/
+
+{
+    "dni": "11874222",
+    "nombre": "Lili",
+    "programa_estudios": "Especialista ennnnnnnnnnnnnnnn",
+    "estado": "Aeeeee",  
+    "observaciones": "Todo bien con comida y muy loco.",
+    "contraseña": "122345"
+}
 
 
 
