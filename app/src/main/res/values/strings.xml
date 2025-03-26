@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">ProyectoQRAsistencia</string>
-    <string name="title_activity_main_ui">MainActivity_ui</string>
-    <string name="title_activity_registro_visitas">RegistroVisitas</string>
+    <string name="title_activity_registro_invitado">Registro de Invitado</string>
 </resources>

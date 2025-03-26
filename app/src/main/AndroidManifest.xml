@@ -15,14 +15,9 @@
         android:theme="@style/Theme.ProyectoQRAsistencia"
         tools:targetApi="31">
         <activity
-            android:name=".RegistroVisitas"
+            android:name=".RegistroInvitado"
             android:exported="false"
-            android:label="@string/title_activity_registro_visitas"
-            android:theme="@style/Theme.ProyectoQRAsistencia" />
-        <activity
-            android:name=".MainActivity_ui"
-            android:exported="false"
-            android:label="@string/title_activity_main_ui"
+            android:label="@string/title_activity_registro_invitado"
             android:theme="@style/Theme.ProyectoQRAsistencia" />
     </application>
 

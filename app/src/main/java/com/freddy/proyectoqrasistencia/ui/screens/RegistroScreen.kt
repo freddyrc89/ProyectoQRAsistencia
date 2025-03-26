@@ -1,28 +1,32 @@
 package com.freddy.proyectoqrasistencia.ui.screens
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import com.freddy.proyectoqrasistencia.ui.theme.ProyectoQRAsistenciaTheme
-import androidx.compose.ui.graphics.Color
+import com.freddy.proyectoqrasistencia.model.Invitado
+import com.freddy.proyectoqrasistencia.model.RegistroResponse
+import com.freddy.proyectoqrasistencia.network.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun RegistroScreen(modifier: Modifier = Modifier) {
     var nombre by remember { mutableStateOf("") }
     var apellidos by remember { mutableStateOf("") }
-
-    // Controlador de teclado
-    val tecladoController = LocalSoftwareKeyboardController.current
+    var mensajeRespuesta by remember { mutableStateOf("") } // Mensaje para mostrar respuesta de la API
+    val contexto = LocalContext.current
 
     Column(
         modifier = modifier
@@ -35,13 +39,34 @@ fun RegistroScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        CampoTexto(label = "Nombre", valor = nombre, onValueChange = { nombre = it }, tecladoController)
+        CampoTexto(label = "Nombre", valor = nombre, onValueChange = { nombre = it })
         Spacer(modifier = Modifier.height(20.dp))
-        CampoTexto(label = "Apellidos", valor = apellidos, onValueChange = { apellidos = it }, tecladoController)
+        CampoTexto(label = "Apellidos", valor = apellidos, onValueChange = { apellidos = it })
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        BotonRegistrar()
+        BotonRegistrar(
+            onClick = {
+                if (nombre.isNotBlank() && apellidos.isNotBlank()) {
+                    registrarInvitado(nombre, apellidos) { mensaje ->
+                        mensajeRespuesta = mensaje
+                        Toast.makeText(contexto, mensaje, Toast.LENGTH_LONG).show()
+                    }
+                } else {
+                    mensajeRespuesta = "Completa todos los campos"
+                }
+            }
+        )
+
+        if (mensajeRespuesta.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = mensajeRespuesta,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.Red
+            )
+        }
     }
 }
 
@@ -68,16 +93,8 @@ fun Titulo() {
     }
 }
 
-/**
- * Campo de texto que abre el teclado automáticamente al recibir foco.
- */
 @Composable
-fun CampoTexto(
-    label: String,
-    valor: String,
-    onValueChange: (String) -> Unit,
-    tecladoController: androidx.compose.ui.platform.SoftwareKeyboardController?
-) {
+fun CampoTexto(label: String, valor: String, onValueChange: (String) -> Unit) {
     Text(text = label, fontSize = 18.sp, fontWeight = FontWeight.Medium)
     TextField(
         value = valor,
@@ -88,9 +105,9 @@ fun CampoTexto(
 }
 
 @Composable
-fun BotonRegistrar() {
+fun BotonRegistrar(onClick: () -> Unit) {
     Button(
-        onClick = { /* Aquí se manejará el registro en el futuro */ },
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
@@ -100,11 +117,27 @@ fun BotonRegistrar() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun RegistroScreenPreview() {
-    ProyectoQRAsistenciaTheme {
-        RegistroScreen()
-    }
+/**
+ * Función para registrar un invitado en la API Flask
+ */
+fun registrarInvitado(nombre: String, apellido: String, onResult: (String) -> Unit) {
+    val invitado = Invitado(nombre, apellido)
+    val call = RetrofitClient.apiService.registrarInvitado(invitado)
+
+    call.enqueue(object : Callback<RegistroResponse> {
+        override fun onResponse(call: Call<RegistroResponse>, response: Response<RegistroResponse>) {
+            if (response.isSuccessful) {
+                onResult("Invitado registrado con éxito")
+            } else {
+                onResult("Error al registrar: ${response.errorBody()?.string()}")
+            }
+        }
+
+        override fun onFailure(call: Call<RegistroResponse>, t: Throwable) {
+            Log.e("API_ERROR", "Error en la API", t)
+            onResult("Error de conexión: ${t.message}")
+        }
+    })
 }
+
 
