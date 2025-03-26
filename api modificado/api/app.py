@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
-
+from flask_migrate import Migrate  # Asegúrate de importar Migrate solo una vez
 from dotenv import load_dotenv
 import os
 
@@ -16,9 +16,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://u911718531_senati:S3nat
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Desactivar el rastreo de modificaciones para ahorrar memoria
 app.config['JWT_SECRET_KEY'] = 'rootgS3nati123'  # Cambiar esto por una clave más segura
 
-# Inicializamos la base de datos y JWT
+# Inicializamos la base de datos y Flask-Migrate
 db = SQLAlchemy(app)
-jwt = JWTManager(app)
+migrate = Migrate(app, db)
+
+# Ahora puedes seguir con la definición de las rutas y los modelos
+
 
 # Modelo para la tabla Vigilante
 class Vigilante(db.Model):
@@ -40,6 +43,7 @@ class Alumno(db.Model):
     programa_estudios = db.Column(db.String(100), nullable=True)
     estado = db.Column(db.String(50), nullable=True)
     observaciones = db.Column(db.String(200), nullable=True)
+    password =db.Column(db.String(50), nullable=True)
     
     def __repr__(self):
         return f"<Alumnos {self.nombre}>"
@@ -82,10 +86,10 @@ def register_alumno():
         programa_estudios = request.json.get('programa_estudios', None)
         estado = request.json.get('estado', None)
         observaciones = request.json.get('observaciones', None)
-        contraseña = request.json.get('contraseña', None)  # ✅ Cambio aquí
+        password = request.json.get('password', None)  # ✅ Cambio aquí
 
         # Verificar si todos los datos requeridos están presentes
-        if not all([dni, nombre, programa_estudios, contraseña]):
+        if not all([dni, nombre, programa_estudios, password]):
             return jsonify({"msg": "Faltan datos obligatorios"}), 400
 
         # Verificar si el alumno ya existe
@@ -93,14 +97,17 @@ def register_alumno():
         if alumno:
             return jsonify({"msg": "El alumno con este DNI ya existe"}), 400
 
-        # Crear un nuevo alumno con contraseña
+        # Encriptar la contraseña antes de guardarla
+        hashed_password = generate_password_hash(password)
+
+        # Crear un nuevo alumno
         nuevo_alumno = Alumno(
             dni=dni,
             nombre=nombre,
             programa_estudios=programa_estudios,
             estado=estado,
-            observaciones=observaciones,
-            contraseña=contraseña  # ✅ Cambio aquí
+            observaciones=observaciones ,
+            password=hashed_password  # ✅ Cambio aquí
         )
 
         db.session.add(nuevo_alumno)
@@ -111,7 +118,6 @@ def register_alumno():
     except Exception as e:
         db.session.rollback()
         return jsonify({"msg": str(e)}), 500  
-0
 
 
 # Ruta de inicio de sesión para vigilantes
@@ -163,4 +169,3 @@ def get_vigilantes():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
