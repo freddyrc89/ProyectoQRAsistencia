@@ -26,12 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         enableEdgeToEdge()
         setContent {
             QRScreen()
@@ -43,7 +40,13 @@ class MainActivity : ComponentActivity() {
 fun QRScreen(viewModel: QRViewModel = viewModel()) {
     val timeLeft by viewModel.timeLeft.collectAsState()
     val showQR by viewModel.showQR.collectAsState()
+    val alumno by viewModel.alumno.collectAsState()
     var qrBitmap by remember { mutableStateOf<Bitmap?>(null) }
+
+    // Simulación de obtención de datos (sustituye con el DNI real si lo tienes)
+    LaunchedEffect(Unit) {
+        viewModel.cargarAlumno("12345678") // Reemplaza con el DNI del usuario
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -57,7 +60,7 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Codigo QR
+        // Código QR
         if (showQR) {
             qrBitmap?.let { bitmap ->
                 Image(
@@ -66,10 +69,6 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
                     modifier = Modifier.size(200.dp)
                 )
             }
-//            Box(modifier = Modifier.size(200.dp)) {
-//                Text("QR", fontSize = 24.sp)
-//
-//            }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -77,7 +76,7 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
         // Botón/Datos
         if (!showQR) {
             Button(onClick = {
-                viewModel.startCountdown();
+                viewModel.startCountdown()
                 qrBitmap = generarQR("https://mi-sistema.com/verificacion?id=12345")
             })
             {
@@ -88,8 +87,8 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Usuario: Juan Perez", fontSize = 18.sp)
-                Text("Email: juan.perez@email.com", fontSize = 18.sp)
+                Text("Usuario: ${alumno?.nombre ?: "Cargando..."}", fontSize = 18.sp)
+                Text("Programa de Estudios: ${alumno?.programa_estudios ?: "Cargando..."}", fontSize = 18.sp)
             }
         }
     }
@@ -99,7 +98,6 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
 @Composable
 fun GreetingPreview() {
     ProyectoQRAsistenciaTheme {
-//        Greeting("Android")
         QRScreen()
     }
 }

@@ -3,8 +3,10 @@ package com.freddy.proyectoqrasistencia
 import android.app.Application
 import android.os.CountDownTimer
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class QRViewModel(application: Application) : AndroidViewModel(application) {
     private val preferencesHelper = PreferencesHelper(application)
@@ -16,6 +18,10 @@ class QRViewModel(application: Application) : AndroidViewModel(application) {
     val showQR: StateFlow<Boolean> = _showQR
 
     private var timer: CountDownTimer? = null
+
+    // Nueva variable para almacenar los datos del alumno
+    private val _alumno = MutableStateFlow<Alumno?>(null)
+    val alumno: StateFlow<Alumno?> = _alumno
 
     init {
         checkRemainingTime()
@@ -58,5 +64,17 @@ class QRViewModel(application: Application) : AndroidViewModel(application) {
                 preferencesHelper.clearExpirationTime()
             }
         }.start()
+    }
+
+    // Nueva función para cargar los datos del alumno desde la API
+    fun cargarAlumno(dni: String) {
+        viewModelScope.launch {
+            try {
+                val respuesta = RetrofitInstance.api.obtenerAlumno(dni)
+                _alumno.value = respuesta
+            } catch (e: Exception) {
+                _alumno.value = null // En caso de error
+            }
+        }
     }
 }
