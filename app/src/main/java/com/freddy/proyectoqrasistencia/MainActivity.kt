@@ -1,9 +1,12 @@
 package com.freddy.proyectoqrasistencia
 
+import ApiService
+import ApiService.Companion.obtenerAlumnoDesdeAPI
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import android.os.Bundle
+import android.util.Log
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,13 +33,40 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
+        ////////////////////////////////////////////////
         setContent {
-            QRScreen()
+            val viewModel: QRViewModel = viewModel()
+            val dni = remember { mutableStateOf("1234567890") }
+            LaunchedEffect(dni.value) {
+                viewModel.cargarAlumno(dni.value) // Llamamos a la función con el DNI almacenado
+                obtenerAlumno(dni.value) // Llama a la función para imprimir en consola
+            }
+            val alumno by viewModel.alumno.collectAsState() // 🔥 Observa cambios en alumno
+            QRScreen(viewModel)
+
+            //////////////////////////////////////////
+        }
+
+    }
+
+    private fun obtenerAlumno(dni: String) {
+        obtenerAlumnoDesdeAPI(dni) { resultado ->
+            if (resultado != null) {
+                Log.d("API_RESPONSE", "Alumno obtenido00: ${resultado.nombre}")
+            } else {
+                Log.e("API_RESPONSE", "No se pudo obtener el alumno")
+            }
         }
     }
 }
@@ -53,6 +83,8 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
     LaunchedEffect(Unit) {
         viewModel.cargarAlumno("12345678") // Reemplaza con el DNI del usuario
     }
+
+
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -119,8 +151,8 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Usuario: Juan Perez", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                        Text("Email: juan.perez@email.com", fontSize = 16.sp, color = MaterialTheme.colorScheme.secondary)
+                        Text("Usuario: ${alumno?.nombre ?: "cargando..."}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        Text("carrera: ${alumno?.programa_estudios?: "cargando..."}", fontSize = 16.sp, color = MaterialTheme.colorScheme.secondary)
                     }
                 }
             }
