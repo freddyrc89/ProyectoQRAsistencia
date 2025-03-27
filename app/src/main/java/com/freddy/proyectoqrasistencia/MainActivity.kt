@@ -12,16 +12,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
+//import androidx.compose.material3.*
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.freddy.proyectoqrasistencia.ui.theme.ProyectoQRAsistenciaTheme
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,55 +47,85 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
     val showQR by viewModel.showQR.collectAsState()
     val alumno by viewModel.alumno.collectAsState()
     var qrBitmap by remember { mutableStateOf<Bitmap?>(null) }
+    qrBitmap = generarQR("https://mi-sistema.com/verificacion?id=12345")
 
     // Simulación de obtención de datos (sustituye con el DNI real si lo tienes)
     LaunchedEffect(Unit) {
         viewModel.cargarAlumno("12345678") // Reemplaza con el DNI del usuario
     }
 
-    Column(
+    Surface(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        color = MaterialTheme.colorScheme.background
     ) {
-        // Contador
-        if (showQR) {
-            Text("Tiempo restante: ${timeLeft}s", fontSize = 20.sp)
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Código QR
-        if (showQR) {
-            qrBitmap?.let { bitmap ->
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = "Código QR",
-                    modifier = Modifier.size(200.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            if (showQR) {
+                Text(
+                    "Tiempo restante: ${timeLeft}s",
+                    fontSize = 24.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(bottom = 12.dp)
                 )
             }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            if (showQR) {
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = 8.dp,
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    qrBitmap?.let { bitmap ->
+                        Image(
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = "Código QR",
+                            modifier = Modifier
+                                .size(220.dp)
+                                .padding(12.dp)
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            if (!showQR) {
+                Button(
+                    onClick = { viewModel.startCountdown() },
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .height(50.dp)
+                        .width(200.dp)
+                ) {
+                    Text("Generar QR", fontSize = 18.sp)
+                }
+            } else {
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    elevation = 4.dp
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("Usuario: Juan Perez", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        Text("Email: juan.perez@email.com", fontSize = 16.sp, color = MaterialTheme.colorScheme.secondary)
+                    }
+                }
+            }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Botón/Datos
-        if (!showQR) {
-            Button(onClick = {
-                viewModel.startCountdown()
-                qrBitmap = generarQR("https://mi-sistema.com/verificacion?id=12345")
-            })
-            {
-                Text("Generar QR")
-            }
-        } else {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("Usuario: ${alumno?.nombre ?: "Cargando..."}", fontSize = 18.sp)
-                Text("Programa de Estudios: ${alumno?.programa_estudios ?: "Cargando..."}", fontSize = 18.sp)
-            }
-        }
     }
 }
 
