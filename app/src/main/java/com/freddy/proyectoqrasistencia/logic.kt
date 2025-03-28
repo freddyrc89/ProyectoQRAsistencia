@@ -1,47 +1,59 @@
 package com.freddy.proyectoqrasistencia
 
-/*fun main() {
-    println("¡Hola, mundo!")
-}*/
-
 
 import io.ktor.client.*
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import kotlinx.serialization.json.JsonObject
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.JWTVerificationException
 
-class AuthManager(private val client: HttpClient) {
-    private var currentToken: String? = null
-    private var userRole: String? = null
+fun main() {
 
-    suspend fun login(username: String, password: String): Boolean {
-        return try {
-            val requestBody = """{"username":"$username","password":"$password"}"""
+    AuthManager.login("41076086", "secret18")
 
-            val response: HttpResponse = client.post("https://tu-api.com/auth") {
-                contentType(ContentType.Application.Json)
-                setBody(requestBody)
-            }
+    println("Hello, World!")
+}
 
-            if (response.status == HttpStatusCode.OK) {
-                val responseBody = response.body<String>()
-                val jsonResponse = Json.parseToJsonElement(responseBody).jsonObject
-                currentToken = jsonResponse["token"]?.jsonPrimitive?.content
-                userRole = jsonResponse["role"]?.jsonPrimitive?.content
-                true
-            } else {
+
+class AuthManager {
+    companion object {
+
+        private val client = HttpClient()
+
+        fun login(dni: String, password: String): Boolean = runBlocking {
+            try {
+                val requestBody = """{"dni":"$dni","password":"$password"}"""
+                val response = client.post("http://127.0.0.1:5000/login") {
+                    contentType(ContentType.Application.Json)
+                    setBody(requestBody)
+                }
+
+                if (response.status == HttpStatusCode.OK) {
+                    val responseBody = response.bodyAsText()
+                    println(responseBody)
+                    val jsonResponse = Json.parseToJsonElement(responseBody).jsonObject
+                    val token = jsonResponse["access_token"]?.jsonPrimitive?.content
+                    println(token)
+                    val decodedJWT = JWT.decode(token)
+
+                    // Store token and role if needed
+                    // You might want to add static storage or use a separate instance
+                    true
+                } else {
+                    false
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
                 false
             }
-        } catch (e: Exception) {
-            false
         }
-    }
-
-    fun getUserRole(): String? {
-        return userRole
     }
 }
