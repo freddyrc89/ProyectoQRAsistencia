@@ -15,7 +15,7 @@ interface ApiService {
     suspend fun obtenerAlumno(@Path("dni") id: String): Alumno
 
     companion object {
-        private const val BASE_URL = "http://10.0.2.2:8000/"
+        private const val BASE_URL = "https://apisenativerde.onrender.com/"
 
         fun create(): ApiService {
             return Retrofit.Builder()

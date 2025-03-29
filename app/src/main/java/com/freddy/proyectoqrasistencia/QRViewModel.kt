@@ -89,6 +89,9 @@ class QRViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+    fun detener(){
+        timer?.cancel()
+    }
     /////////////////////////////////
 }
 

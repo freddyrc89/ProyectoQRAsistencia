@@ -77,11 +77,11 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
     val showQR by viewModel.showQR.collectAsState()
     val alumno by viewModel.alumno.collectAsState()
     var qrBitmap by remember { mutableStateOf<Bitmap?>(null) }
-    qrBitmap = generarQR("https://mi-sistema.com/verificacion?id=12345")
+    qrBitmap = generarQR(alumno?.dni.toString())
 
     // Simulación de obtención de datos (sustituye con el DNI real si lo tienes)
     LaunchedEffect(Unit) {
-        viewModel.cargarAlumno("12345678") // Reemplaza con el DNI del usuario
+        viewModel.cargarAlumno("876543222") // Reemplaza con el DNI del usuario
     }
 
 
@@ -152,6 +152,7 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text("Usuario: ${alumno?.nombre ?: "cargando..."}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        Text("Usuario: ${alumno?.dni ?: "cargando..."}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                         Text("carrera: ${alumno?.programa_estudios?: "cargando..."}", fontSize = 16.sp, color = MaterialTheme.colorScheme.secondary)
                     }
                 }
