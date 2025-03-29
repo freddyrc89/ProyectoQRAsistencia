@@ -81,7 +81,7 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
 
     // Simulación de obtención de datos (sustituye con el DNI real si lo tienes)
     LaunchedEffect(Unit) {
-        viewModel.cargarAlumno("876543222") // Reemplaza con el DNI del usuario
+        viewModel.cargarAlumno("177799999") // Reemplaza con el DNI del usuario
     }
 
 
@@ -152,8 +152,9 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text("Usuario: ${alumno?.nombre ?: "cargando..."}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                        Text("Usuario: ${alumno?.dni ?: "cargando..."}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        Text("dni: ${alumno?.dni ?: "cargando..."}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                         Text("carrera: ${alumno?.programa_estudios?: "cargando..."}", fontSize = 16.sp, color = MaterialTheme.colorScheme.secondary)
+
                     }
                 }
             }
