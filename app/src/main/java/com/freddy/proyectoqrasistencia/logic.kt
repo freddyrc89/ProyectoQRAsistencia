@@ -4,6 +4,7 @@ package com.freddy.proyectoqrasistencia
 import io.ktor.client.*
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -14,14 +15,23 @@ import kotlinx.serialization.json.jsonPrimitive
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
+import com.freddy.proyectoqrasistencia.AuthManager.Companion.getAuthenticatedClient
 //import android.util.Base64
 import java.util.Base64
 
 fun main() {
 
     AuthManager.login("41076086", "secret18")
+    runBlocking {
+
+        val httpResponse = AuthManager.getAuthenticatedClient().get("http://127.0.0.1:5000/vigilantes")
+        println(httpResponse.bodyAsText())
+
+    }
 
     println("Hello, World!")
+
+
 }
 
 fun decodeJwtPayload(jwt: String): String {
@@ -83,11 +93,32 @@ class InMemoryStorage : DataStorage {
     }
 }
 
+class TokenManager {
+    private var currentToken: String? = null
+
+    fun setToken(token: String) {
+        currentToken = token
+    }
+
+    fun getHttpClient(): HttpClient {
+        return HttpClient() {
+            // Automatically add token to every request
+            defaultRequest {
+                currentToken?.let {
+                    header(HttpHeaders.Authorization, "Bearer $it")
+                }
+            }
+        }
+    }
+}
+
 class AuthManager {
     companion object {
 
         private val client = HttpClient()
         public val storage: DataStorage = InMemoryStorage()
+        private val tokenManager = TokenManager()
+
 
         fun getJWTData(): String? {
 
@@ -101,12 +132,15 @@ class AuthManager {
 
         }
 
+        fun getAuthenticatedClient() = tokenManager.getHttpClient()
+
         fun login(dni: String, password: String): Boolean = runBlocking {
             try {
                 val requestBody = """{"dni":"$dni","password":"$password"}"""
                 val response = client.post("http://127.0.0.1:5000/login") {
                     contentType(ContentType.Application.Json)
                     setBody(requestBody)
+
                 }
 
                 if (response.status == HttpStatusCode.OK) {
@@ -119,12 +153,16 @@ class AuthManager {
                     println(decoded)
                     storage.saveString("token", token)
                     storage.saveString("decoded", decoded)
+                    tokenManager.setToken(token)
+                    val httpResponse = getAuthenticatedClient().get("http://127.0.0.1:5000/vigilantes")
+                    println(httpResponse.bodyAsText())
 
 
 
 
-                    // Store token and role if needed
-                    // You might want to add static storage or use a separate instance
+
+
+
                     true
                 } else {
                     false
