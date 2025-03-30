@@ -66,12 +66,40 @@ fun decodeJwtPayload(jwt: String): String {
     return String(decodedBytes, Charsets.UTF_8)
 }*/
 
+interface DataStorage {
+    fun saveString(key: String, value: String)
+    fun getString(key: String): String?
+}
 
+class InMemoryStorage : DataStorage {
+    private val storage = mutableMapOf<String, String>()
+
+    override fun saveString(key: String, value: String) {
+        storage[key] = value
+    }
+
+    override fun getString(key: String): String? {
+        return storage[key]
+    }
+}
 
 class AuthManager {
     companion object {
 
         private val client = HttpClient()
+        public val storage: DataStorage = InMemoryStorage()
+
+        fun getJWTData(): String? {
+
+            return storage.getString("decoded")
+
+        }
+
+        fun getJWT(): String? {
+
+            return storage.getString("token")
+
+        }
 
         fun login(dni: String, password: String): Boolean = runBlocking {
             try {
@@ -89,6 +117,10 @@ class AuthManager {
                     println(token)
                     val decoded = decodeJwtPayload(token!!)
                     println(decoded)
+                    storage.saveString("token", token)
+                    storage.saveString("decoded", decoded)
+
+
 
 
                     // Store token and role if needed
