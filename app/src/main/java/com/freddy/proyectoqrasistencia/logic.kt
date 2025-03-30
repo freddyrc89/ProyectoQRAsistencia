@@ -14,6 +14,8 @@ import kotlinx.serialization.json.jsonPrimitive
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
+//import android.util.Base64
+import java.util.Base64
 
 fun main() {
 
@@ -21,6 +23,49 @@ fun main() {
 
     println("Hello, World!")
 }
+
+fun decodeJwtPayload(jwt: String): String {
+    // Split the JWT by dots
+    val parts = jwt.split(".")
+
+    // Make sure we have at least 2 parts
+    if (parts.size < 2) {
+        throw IllegalArgumentException("Invalid JWT format")
+    }
+
+    // Get the middle part (payload)
+    val encodedPayload = parts[1]
+
+    // Use the URL decoder directly - it handles the lack of padding
+    val decodedBytes = Base64.getUrlDecoder().decode(encodedPayload)
+
+    // Convert bytes to string
+    return String(decodedBytes, Charsets.UTF_8)
+}
+
+
+/*fun decodeJwtPayload(jwt: String): String {
+    // Split the JWT by dots
+    val parts = jwt.split(".")
+
+    // Make sure we have at least 3 parts
+    if (parts.size < 2) {
+        throw IllegalArgumentException("Invalid JWT format")
+    }
+
+    // Get the middle part (payload)
+    val encodedPayload = parts[1]
+
+    // For Android
+    val decodedBytes = Base64.decode(encodedPayload, Base64.URL_SAFE)
+
+    // For Java/Kotlin (non-Android)
+    // val decodedBytes = java.util.Base64.getUrlDecoder().decode(encodedPayload)
+
+    // Convert bytes to string
+    return String(decodedBytes, Charsets.UTF_8)
+}*/
+
 
 
 class AuthManager {
@@ -42,7 +87,9 @@ class AuthManager {
                     val jsonResponse = Json.parseToJsonElement(responseBody).jsonObject
                     val token = jsonResponse["access_token"]?.jsonPrimitive?.content
                     println(token)
-                    val decodedJWT = JWT.decode(token)
+                    val decoded = decodeJwtPayload(token!!)
+                    println(decoded)
+
 
                     // Store token and role if needed
                     // You might want to add static storage or use a separate instance
@@ -54,6 +101,7 @@ class AuthManager {
                 e.printStackTrace()
                 false
             }
+
         }
     }
 }
