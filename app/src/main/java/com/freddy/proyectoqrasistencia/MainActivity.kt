@@ -1,8 +1,8 @@
 package com.freddy.proyectoqrasistencia
 
-import ApiService
+
 import ApiService.Companion.obtenerAlumnoDesdeAPI
-import android.content.pm.ActivityInfo
+import android.R
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import android.os.Bundle
@@ -13,7 +13,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 //import androidx.compose.material3.*
@@ -28,15 +27,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 class MainActivity : ComponentActivity() {
 
@@ -44,15 +42,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
-        ////////////////////////////////////////////////
         setContent {
             val viewModel: QRViewModel = viewModel()
-            val dni = remember { mutableStateOf("1234567890") }
-            LaunchedEffect(dni.value) {
-                viewModel.cargarAlumno(dni.value) // Llamamos a la función con el DNI almacenado
-                obtenerAlumno(dni.value) // Llama a la función para imprimir en consola
-            }
-            val alumno by viewModel.alumno.collectAsState() // 🔥 Observa cambios en alumno
+//            val dni = remember { mutableStateOf("1234567890") }
+//            LaunchedEffect(dni.value) {
+//                viewModel.cargarAlumno(dni.value) // Llamamos a la función con el DNI almacenado
+//                obtenerAlumno(dni.value) // Llama a la función para imprimir en consola
+//            }
             QRScreen(viewModel)
 
             //////////////////////////////////////////
@@ -77,12 +73,9 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
     val showQR by viewModel.showQR.collectAsState()
     val alumno by viewModel.alumno.collectAsState()
     var qrBitmap by remember { mutableStateOf<Bitmap?>(null) }
-    qrBitmap = generarQR(alumno?.dni.toString())
+    alumno?.let { qrBitmap = generarQR(it.dni) }
+    viewModel.cargarAlumno("1234567890")
 
-    // Simulación de obtención de datos (sustituye con el DNI real si lo tienes)
-    LaunchedEffect(Unit) {
-        viewModel.cargarAlumno("177799999") // Reemplaza con el DNI del usuario
-    }
 
 
 
@@ -104,24 +97,27 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            if (showQR) {
+                Spacer(modifier = Modifier.height(12.dp))
                 Card(
                     shape = RoundedCornerShape(16.dp),
                     elevation = 8.dp,
                     modifier = Modifier.padding(16.dp)
                 ) {
-                    qrBitmap?.let { bitmap ->
-                        Image(
-                            bitmap = bitmap.asImageBitmap(),
-                            contentDescription = "Código QR",
-                            modifier = Modifier
-                                .size(220.dp)
-                                .padding(12.dp)
-                        )
+                    if (alumno == null) {
+                        Box(
+                            modifier = Modifier.size(220.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    } else {
+                        qrBitmap?.let { bitmap ->
+                            Image(
+                                bitmap = bitmap.asImageBitmap(),
+                                contentDescription = "Código QR",
+                                modifier = Modifier.size(220.dp).padding(12.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -137,7 +133,7 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
                         .height(50.dp)
                         .width(200.dp)
                 ) {
-                    Text("Generar QR", fontSize = 18.sp)
+                    Text("Generar QR", fontSize = 18.sp, color= Color.White)
                 }
             } else {
                 Card(
@@ -151,11 +147,18 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Usuario: ${alumno?.nombre ?: "cargando..."}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                        Text("dni: ${alumno?.dni ?: "cargando..."}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                        Text("carrera: ${alumno?.programa_estudios?: "cargando..."}", fontSize = 16.sp, color = MaterialTheme.colorScheme.secondary)
-
+                        if (alumno == null) {
+                            CircularProgressIndicator()
+                        } else {
+                            Text("Usuario: ${alumno!!.nombre}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                            Text("DNI: ${alumno!!.dni}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                            Text("Carrera: ${alumno!!.programa_estudios}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        }
                     }
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+                Button(onClick = {viewModel.detener()}) {
+                    Text("Detener conteo", color= Color.White)
                 }
             }
         }

@@ -1,15 +1,12 @@
 package com.freddy.proyectoqrasistencia
 
-import ApiService.Companion.obtenerAlumnoDesdeAPI
+import ApiService.Companion.obtenerAlumnoDesdeAPI //obtener daots desde api
 import android.app.Application
 import android.os.CountDownTimer
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 class QRViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -20,10 +17,6 @@ class QRViewModel(application: Application) : AndroidViewModel(application) {
     // Nueva variable para almacenar los datos del alumno
     private val _alumno = MutableStateFlow<Alumno?>(null)
     val alumno: StateFlow<Alumno?> = _alumno.asStateFlow()
-
-
-
-
     ///
     private val _timeLeft = MutableStateFlow(0)
     val timeLeft: StateFlow<Int> = _timeLeft
@@ -32,11 +25,6 @@ class QRViewModel(application: Application) : AndroidViewModel(application) {
     val showQR: StateFlow<Boolean> = _showQR
 
     private var timer: CountDownTimer? = null
-
-
-
-
-
 
     init {
         checkRemainingTime()
@@ -89,9 +77,13 @@ class QRViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-    fun detener(){
-        timer?.cancel()
+    fun detener() {
+        timer?.cancel() // Cancela el temporizador si está en ejecución
+        _timeLeft.value = 0 // Reinicia el contador a su estado inicial
+        _showQR.value = false // Oculta el QR
+        preferencesHelper.clearExpirationTime() // Borra la expiración guardada
     }
+
     /////////////////////////////////
 }
 
