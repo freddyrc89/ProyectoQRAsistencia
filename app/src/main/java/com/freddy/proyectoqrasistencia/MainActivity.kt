@@ -126,7 +126,10 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
 
             if (!showQR) {
                 Button(
-                    onClick = { viewModel.startCountdown() },
+                    onClick = {
+                        viewModel.startCountdown()
+                        viewModel.enviarDatosQR() // Enviar datos al API al generar QR
+                    },
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .padding(8.dp)

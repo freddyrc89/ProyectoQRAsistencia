@@ -3,6 +3,7 @@ package com.freddy.proyectoqrasistencia
 import ApiService.Companion.obtenerAlumnoDesdeAPI //obtener daots desde api
 import android.app.Application
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -85,5 +86,15 @@ class QRViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /////////////////////////////////
+    fun enviarDatosQR() {
+        val dni = _alumno.value?.dni?.toIntOrNull() ?: return
+        ApiService.enviarDatosQR(dni, true) { exito ->
+            if (exito) {
+                Log.d("API_RESPONSE", "Datos enviados correctamente")
+            } else {
+                Log.e("API_RESPONSE", "Error al enviar datos")
+            }
+        }
+    }
 }
 
