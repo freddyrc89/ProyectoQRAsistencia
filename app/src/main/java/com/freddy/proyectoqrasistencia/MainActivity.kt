@@ -56,15 +56,15 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    private fun obtenerAlumno(dni: String) {
-        obtenerAlumnoDesdeAPI(dni) { resultado ->
-            if (resultado != null) {
-                Log.d("API_RESPONSE", "Alumno obtenido00: ${resultado.nombre}")
-            } else {
-                Log.e("API_RESPONSE", "No se pudo obtener el alumno")
-            }
-        }
-    }
+//    private fun obtenerAlumno(dni: String) {
+//        obtenerAlumnoDesdeAPI(dni) { resultado ->
+//            if (resultado != null) {
+//                Log.d("API_RESPONSE", "Alumno obtenido00: ${resultado.nombre}")
+//            } else {
+//                Log.e("API_RESPONSE", "No se pudo obtener el alumno")
+//            }
+//        }
+//    }
 }
 
 @Composable
