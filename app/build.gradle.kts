@@ -74,5 +74,9 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:2.3.7")
     implementation("com.auth0:java-jwt:4.4.0")
 
+    implementation("androidx.compose.material3:material3:1.1.1") // Usar la version mas reciente
+    implementation("androidx.navigation:navigation-compose:2.7.7") // Usar la version mas reciente
+
+    implementation("nl.dionsegijn:konfetti-compose:2.0.5") // Usa la version mas reciente
     }
 
