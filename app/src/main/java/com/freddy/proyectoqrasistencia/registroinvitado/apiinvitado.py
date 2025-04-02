@@ -1,7 +1,7 @@
 import mysql.connector
 from flask import Flask, request, jsonify
 from datetime import datetime
-from conexiondbatosinvitados import insertar_invitado, obtener_invitados
+from invitadosdb import insertar_invitado, obtener_invitados
 
 app = Flask(__name__)
 
@@ -10,7 +10,7 @@ app = Flask(__name__)
 def home():
     return jsonify({"mensaje": "Bienvenido al Registro de Invitados"}), 200
 
-# Ruta para registrar invitadosxd
+# Ruta para registrar invitados
 @app.route('/invitado', methods=['POST'])
 def registrar_invitado():
     datos = request.get_json()
@@ -24,7 +24,7 @@ def registrar_invitado():
     fecha_registro = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     try:
-        # para insertar a la base de datos p
+        # para insertar a la base de datos
         insertar_invitado(nombre, apellido, fecha_registro)
 
         return jsonify({
@@ -39,7 +39,7 @@ def registrar_invitado():
     except mysql.connector.Error as err:
         return jsonify({"error": f"Error en la base de datos: {err}"}), 500
 
-# Ruta z listar todos los invitados
+# Ruta para listar todos los invitados
 @app.route('/invitados', methods=['GET'])
 def listar_invitados():
     try:
@@ -50,4 +50,4 @@ def listar_invitados():
         return jsonify({"error": f"Error en la base de datos: {err}"}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

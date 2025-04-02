@@ -41,3 +41,4 @@ def obtener_invitados():
     conn.close()  # Cerrar la conexión
 
     return invitados
+
