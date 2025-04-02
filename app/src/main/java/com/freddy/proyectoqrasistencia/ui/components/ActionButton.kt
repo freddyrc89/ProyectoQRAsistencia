@@ -1,4 +1,4 @@
-package com.freddy.proyectoqrasistencia.ui.components
+package com.androidlead.loginappui.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.androidlead.loginappui.R
-import com.androidlead.loginappui.ui.theme.LoginAppUiTheme
+import com.freddy.proyectoqrasistencia.ui.theme.LoginAppUiTheme
 import com.androidlead.loginappui.ui.theme.PrimaryPink
 
 @Composable

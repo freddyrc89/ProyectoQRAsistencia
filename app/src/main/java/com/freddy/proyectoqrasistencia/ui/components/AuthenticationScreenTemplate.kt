@@ -1,46 +1,19 @@
-package com.freddy.proyectoqrasistencia.ui.components
+package com.androidlead.loginappui.ui.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.scrollBy
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -86,37 +59,46 @@ fun AuthenticationScreenTemplate(
             .imePadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(imgRes),
-            contentDescription = null,
+        // Contenedor para centrar la imagen
+        Box(
             modifier = Modifier
-                .size(300.dp)
-                .padding(start = 30.dp)
-        )
+                .fillMaxWidth()
+                .padding(top = 32.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(imgRes),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(300.dp)
+                    .padding(10.dp)
+            )
+        }
+
         Message(
             title = title,
             subtitle = subtitle
         )
-        Spacer(
-            modifier = Modifier.height(8.dp)
-        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         InputField(
             leadingIconRes = R.drawable.ic_person,
-            placeholderText = "You email",
+            placeholderText = "Correo",
             modifier = Modifier.padding(horizontal = 24.dp)
         )
-        Spacer(
-            modifier = Modifier.height(10.dp)
-        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
         InputField(
             leadingIconRes = R.drawable.ic_key,
-            placeholderText = "Password",
+            placeholderText = "Contraseña",
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.padding(horizontal = 24.dp)
         )
-        Spacer(
-            modifier = Modifier.height(10.dp)
-        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
         ActionButton(
             text = mainActionButtonTitle,
             isNavigationArrowVisible = true,
@@ -125,12 +107,14 @@ fun AuthenticationScreenTemplate(
             shadowColor = actionButtonShadow,
             modifier = Modifier.padding(horizontal = 24.dp)
         )
+
         Separator(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp)
                 .height(62.dp)
         )
+
         ActionButton(
             text = secondaryActionButtonTitle,
             isNavigationArrowVisible = false,
@@ -234,7 +218,7 @@ private fun Separator(
             modifier = Modifier.weight(weight = 1f)
         )
         Text(
-            text = "Or",
+            text = "O",
             style = MaterialTheme.typography.labelMedium,
             color = Color.White
         )
