@@ -1,17 +1,17 @@
-package com.androidlead.loginappui.ui.screen.login
+package com.freddy.proyectoqrasistencia.ui.screen.login
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.graphics.Color
-import com.androidlead.loginappui.R
-import com.androidlead.loginappui.ui.components.AuthenticationScreenTemplate
-import com.androidlead.loginappui.ui.theme.AestheticBlue
-import com.androidlead.loginappui.ui.theme.AestheticBlueLight
-import com.androidlead.loginappui.ui.theme.AestheticWhite
-import com.androidlead.loginappui.ui.theme.PrimaryPinkDark
-import com.androidlead.loginappui.ui.theme.PrimaryPinkLight
+import com.freddy.proyectoqrasistencia.R
+import com.freddy.proyectoqrasistencia.ui.components.AuthenticationScreenTemplate
+import com.freddy.proyectoqrasistencia.ui.theme.AestheticBlue
+import com.freddy.proyectoqrasistencia.ui.theme.AestheticBlueLight
+import com.freddy.proyectoqrasistencia.ui.theme.AestheticWhite
+import com.freddy.proyectoqrasistencia.ui.theme.PrimaryPinkDark
+import com.freddy.proyectoqrasistencia.ui.theme.PrimaryPinkLight
 import androidx.compose.material3.ButtonDefaults
 
 @Composable

@@ -1,4 +1,4 @@
-package com.androidlead.loginappui.ui.theme
+package com.freddy.proyectoqrasistencia.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

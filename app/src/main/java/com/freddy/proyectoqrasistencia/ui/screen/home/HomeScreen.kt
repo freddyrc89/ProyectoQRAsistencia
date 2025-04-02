@@ -1,4 +1,4 @@
-package com.androidlead.loginappui.ui.screen.home
+package com.freddy.proyectoqrasistencia.ui.screen.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,12 +18,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.androidlead.loginappui.ui.components.ActionButton
-import com.androidlead.loginappui.ui.theme.PrimaryGreen
-import com.androidlead.loginappui.ui.theme.PrimaryGreenDark
-import com.androidlead.loginappui.ui.theme.PrimaryPinkDark
-import com.androidlead.loginappui.ui.theme.PrimaryViolet
-import com.androidlead.loginappui.ui.util.KonfettiUtil
+import com.freddy.proyectoqrasistencia.ui.components.ActionButton
+import com.freddy.proyectoqrasistencia.ui.theme.PrimaryGreen
+import com.freddy.proyectoqrasistencia.ui.theme.PrimaryGreenDark
+import com.freddy.proyectoqrasistencia.ui.theme.PrimaryPinkDark
+import com.freddy.proyectoqrasistencia.ui.theme.PrimaryViolet
+import com.freddy.proyectoqrasistencia.ui.util.KonfettiUtil
 import nl.dionsegijn.konfetti.compose.KonfettiView
 
 @Composable

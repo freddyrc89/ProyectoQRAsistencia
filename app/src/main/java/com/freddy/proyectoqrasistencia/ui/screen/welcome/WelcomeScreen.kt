@@ -1,4 +1,4 @@
-package com.androidlead.loginappui.ui.screen.welcome
+package com.freddy.proyectoqrasistencia.ui.screen.welcome
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,13 +20,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.androidlead.loginappui.R
-import com.androidlead.loginappui.ui.components.ActionButton
-import com.androidlead.loginappui.ui.theme.DarkTextColor
-import com.androidlead.loginappui.ui.theme.PrimaryPinkBlended
-import com.androidlead.loginappui.ui.theme.PrimaryYellow
-import com.androidlead.loginappui.ui.theme.PrimaryYellowDark
-import com.androidlead.loginappui.ui.theme.PrimaryYellowLight
+import com.freddy.proyectoqrasistencia.R
+import com.freddy.proyectoqrasistencia.ui.components.ActionButton
+import com.freddy.proyectoqrasistencia.ui.theme.DarkTextColor
+import com.freddy.proyectoqrasistencia.ui.theme.PrimaryPinkBlended
+import com.freddy.proyectoqrasistencia.ui.theme.PrimaryYellow
+import com.freddy.proyectoqrasistencia.ui.theme.PrimaryYellowDark
+import com.freddy.proyectoqrasistencia.ui.theme.PrimaryYellowLight
 
 @Composable
 fun WelcomeScreen(

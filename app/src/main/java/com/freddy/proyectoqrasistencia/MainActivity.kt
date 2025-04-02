@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.androidlead.loginappui.ui.screen.container.ScreenContainer
-import com.androidlead.loginappui.ui.theme.LoginAppUiTheme
+import com.freddy.proyectoqrasistencia.ui.screen.container.ScreenContainer
+import com.freddy.proyectoqrasistencia.ui.theme.LoginAppUiTheme
 import android.net.Uri
 import android.widget.Toast
 
