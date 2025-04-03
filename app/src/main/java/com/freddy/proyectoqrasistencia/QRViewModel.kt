@@ -14,11 +14,11 @@ class QRViewModel(application: Application) : AndroidViewModel(application) {
 
 
     private val preferencesHelper = PreferencesHelper(application)
-    //
-    // Nueva variable para almacenar los datos del alumno
-    private val _alumno = MutableStateFlow<Alumno?>(null)
-    val alumno: StateFlow<Alumno?> = _alumno.asStateFlow()
-    ///
+
+
+    private val _alumno = MutableStateFlow<Alumno?>(null)//variable para modificar dentro del VM
+    val alumno: StateFlow<Alumno?> = _alumno.asStateFlow()//variable para que clases externas accedan a ellas
+
     private val _timeLeft = MutableStateFlow(0)
     val timeLeft: StateFlow<Int> = _timeLeft
 
@@ -27,29 +27,35 @@ class QRViewModel(application: Application) : AndroidViewModel(application) {
 
     private var timer: CountDownTimer? = null
 
+    //Al ser invocada la clase se ejecuta el metodo para calcular cuanto tiempo restante queda
     init {
         checkRemainingTime()
     }
 
+
     fun startCountdown() {
         val expirationTime = System.currentTimeMillis() + (3 * 60 * 1000) // 3 minutos desde ahora
-        preferencesHelper.saveExpirationTime(expirationTime)
-
+        preferencesHelper.saveExpirationTime(expirationTime)// Guarda en SharedPreferences
+        //Inicia el contador con el tiempo restante y muestra el qr
         startTimer(expirationTime)
         _showQR.value = true
     }
 
     private fun checkRemainingTime() {
-        val expirationTime = preferencesHelper.getExpirationTime()
+        //Obtiene el tiempo restante
+        val expirationTime = preferencesHelper.getExpirationTime()// en caso no exista duvuelve 0
         val currentTime = System.currentTimeMillis()
+
+        // Calcula cuanto tiempo queda en expirationTime
         val remainingTime = ((expirationTime - currentTime) / 1000).toInt()
 
+        //si aun queda tiempo mantiene la vista del QR caso contrario oculta el QR
         if (remainingTime > 0) {
             startTimer(expirationTime)
             _showQR.value = true
         } else {
             _showQR.value = false
-            _timeLeft.value = 0
+            _timeLeft.value = 0 //coloca el tiempo restante en 0
         }
     }
 
@@ -69,6 +75,13 @@ class QRViewModel(application: Application) : AndroidViewModel(application) {
             }
         }.start()
     }
+
+    fun detener() {
+        timer?.cancel() // Cancela el temporizador si está en ejecución
+        _timeLeft.value = 0 // Reinicia el contador a su estado inicial
+        _showQR.value = false // Oculta el QR
+        preferencesHelper.clearExpirationTime() // Borra el tiempo restante
+    }
     /////////////////////////////////////////////////////////
     // Nueva función para cargar los datos del alumno desde la API
     fun cargarAlumno(dni: String) {
@@ -78,12 +91,7 @@ class QRViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-    fun detener() {
-        timer?.cancel() // Cancela el temporizador si está en ejecución
-        _timeLeft.value = 0 // Reinicia el contador a su estado inicial
-        _showQR.value = false // Oculta el QR
-        preferencesHelper.clearExpirationTime() // Borra la expiración guardada
-    }
+
 
     /////////////////////////////////
     fun enviarDatosQR() {
