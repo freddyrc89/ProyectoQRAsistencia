@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-
 }
 
 android {
@@ -11,7 +10,7 @@ android {
     defaultConfig {
         applicationId = "com.freddy.proyectoqrasistencia"
         minSdk = 33
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -54,10 +53,10 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:2.3.7")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7")
 
-        // AndroidX Core
+    // AndroidX Core
     implementation("androidx.core:core-ktx:1.12.0")
 
-        // Activity Compose
+    // Activity Compose
     implementation("androidx.activity:activity-compose:1.8.2")
 
     val compose_version = "1.6.3"
@@ -65,9 +64,9 @@ dependencies {
     implementation("androidx.compose.material:material:$compose_version")
     implementation("androidx.compose.ui:ui-tooling-preview:$compose_version")
 
-        // Optional but recommended for Compose debugging
+    // Optional but recommended for Compose debugging
     debugImplementation("androidx.compose.ui:ui-tooling:$compose_version")
-        // Jetpack Compose Navigation
+    // Jetpack Compose Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("io.ktor:ktor-client-java:2.3.7")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
@@ -78,5 +77,5 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7") // Usar la version mas reciente
 
     implementation("nl.dionsegijn:konfetti-compose:2.0.5") // Usa la version mas reciente
-    }
+}
 
