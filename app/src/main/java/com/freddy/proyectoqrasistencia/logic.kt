@@ -24,7 +24,8 @@ fun main() {
     AuthManager.login("41076086", "secret18")
     runBlocking {
 
-        val httpResponse = AuthManager.getAuthenticatedClient().get("http://apisenatiamarillo.onrender.com/vigilantes")
+        //val httpResponse = AuthManager.getAuthenticatedClient().get("http://apisenatiamarillo.onrender.com/vigilantes")
+        val httpResponse = AuthManager.getAuthenticatedClient().get("http://127.0.0.1:5000/vigilantes")
         println(httpResponse.bodyAsText())
 
     }
@@ -137,7 +138,8 @@ class AuthManager {
         fun login(dni: String, password: String): Boolean = runBlocking {
             try {
                 val requestBody = """{"dni":"$dni","password":"$password"}"""
-                val response = client.post("http://apisenatiamarillo.onrender.com/login") {
+                //val response = client.post("http://apisenatiamarillo.onrender.com/login") {
+                val response = client.post("http://127.0.0.1:5000/login") {
                     contentType(ContentType.Application.Json)
                     setBody(requestBody)
 
