@@ -10,11 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class QRViewModel(application: Application) : AndroidViewModel(application) {
-
-
-
     private val preferencesHelper = PreferencesHelper(application)
-
 
     private val _alumno = MutableStateFlow<Alumno?>(null)//variable para modificar dentro del VM
     val alumno: StateFlow<Alumno?> = _alumno.asStateFlow()//variable para que clases externas accedan a ellas
@@ -82,6 +78,7 @@ class QRViewModel(application: Application) : AndroidViewModel(application) {
         _showQR.value = false // Oculta el QR
         preferencesHelper.clearExpirationTime() // Borra el tiempo restante
     }
+
     /////////////////////////////////////////////////////////
     // Nueva función para cargar los datos del alumno desde la API
     fun cargarAlumno(dni: String) {

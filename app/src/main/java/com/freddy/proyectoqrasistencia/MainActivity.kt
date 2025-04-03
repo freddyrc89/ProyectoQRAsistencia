@@ -44,27 +44,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val viewModel: QRViewModel = viewModel()
-//            val dni = remember { mutableStateOf("1234567890") }
-//            LaunchedEffect(dni.value) {
-//                viewModel.cargarAlumno(dni.value) // Llamamos a la función con el DNI almacenado
-//                obtenerAlumno(dni.value) // Llama a la función para imprimir en consola
-//            }
             QRScreen(viewModel)
-
-            //////////////////////////////////////////
         }
-
     }
-
-//    private fun obtenerAlumno(dni: String) {
-//        obtenerAlumnoDesdeAPI(dni) { resultado ->
-//            if (resultado != null) {
-//                Log.d("API_RESPONSE", "Alumno obtenido00: ${resultado.nombre}")
-//            } else {
-//                Log.e("API_RESPONSE", "No se pudo obtener el alumno")
-//            }
-//        }
-//    }
 }
 
 @Composable
@@ -74,10 +56,8 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
     val alumno by viewModel.alumno.collectAsState()
     var qrBitmap by remember { mutableStateOf<Bitmap?>(null) }
     alumno?.let { qrBitmap = generarQR(it.dni) }
-    viewModel.cargarAlumno("1234567890")
-
-
-
+    viewModel.cargarAlumno("7779991")//actualmente no se guarda con la vista ||modificar esto
+    //URGENTE MEJORAR LA LOGICA CON LOS DNI
 
     Surface(
         modifier = Modifier.fillMaxSize(),
