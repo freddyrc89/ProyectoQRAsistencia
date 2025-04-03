@@ -24,7 +24,7 @@ fun main() {
     AuthManager.login("41076086", "secret18")
     runBlocking {
 
-        val httpResponse = AuthManager.getAuthenticatedClient().get("http://apisenatiamarillo.onrender.com/login")
+        val httpResponse = AuthManager.getAuthenticatedClient().get("http://apisenatiamarillo.onrender.com/vigilantes")
         println(httpResponse.bodyAsText())
 
     }
@@ -154,8 +154,8 @@ class AuthManager {
                     storage.saveString("token", token)
                     storage.saveString("decoded", decoded)
                     tokenManager.setToken(token)
-                    val httpResponse = getAuthenticatedClient().get("http://apisenatiamarillo.onrender.com/login")
-                    println(httpResponse.bodyAsText())
+                    //val httpResponse = getAuthenticatedClient().get("http://apisenatiamarillo.onrender.com/vigilantes")
+                    //println(httpResponse.bodyAsText())
 
 
 
