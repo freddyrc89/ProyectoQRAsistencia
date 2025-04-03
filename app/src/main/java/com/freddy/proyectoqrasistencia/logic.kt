@@ -18,6 +18,8 @@ import com.auth0.jwt.exceptions.JWTVerificationException
 import com.freddy.proyectoqrasistencia.AuthManager.Companion.getAuthenticatedClient
 //import android.util.Base64
 import java.util.Base64
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 fun main() {
 
@@ -27,6 +29,8 @@ fun main() {
         //val httpResponse = AuthManager.getAuthenticatedClient().get("http://apisenatiamarillo.onrender.com/vigilantes")
         val httpResponse = AuthManager.getAuthenticatedClient().get("http://127.0.0.1:5000/vigilantes")
         println(httpResponse.bodyAsText())
+        val map = AuthManager.getJWTData()
+        println(map?.get("role"))
 
     }
 
@@ -121,9 +125,18 @@ class AuthManager {
         private val tokenManager = TokenManager()
 
 
-        fun getJWTData(): String? {
+        fun getJWTData(): Map<String, Any>? {
 
-            return storage.getString("decoded")
+            val jsonString = storage.getString("decoded")
+            if (jsonString == null) {
+                return null
+            }
+
+            val gson = Gson()
+            val mapType = object : TypeToken<Map<String, Any>>() {}.type
+            val map: Map<String, Any> = gson.fromJson(jsonString, mapType)
+
+            return map
 
         }
 
