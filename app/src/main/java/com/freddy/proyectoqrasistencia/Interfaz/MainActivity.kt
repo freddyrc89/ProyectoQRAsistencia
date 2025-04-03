@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import com.freddy.proyectoqrasistencia.ui.theme.InterfazTheme
 import kotlinx.coroutines.launch
 import com.freddy.proyectoqrasistencia.R
+import io.ktor.client.HttpClient
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +59,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             InterfazTheme {
-                Screen()
+                S
             }
         }
     }
@@ -69,10 +70,11 @@ enum class TipoUsuario {
     VIGILANTE
 }
 
-var tipoUsuarioAutenticado: TipoUsuario = TipoUsuario.ALUMNO // Reemplaza esto con tu lógica de autenticación (ejemplo)
 
 @Composable
-fun Screen(modifier: Modifier = Modifier) {
+fun Screen(modifier: Modifier = Modifier,
+           tipoUsuarioAutenticado: TipoUsuario,
+           client: HttpClient) {
     val drawerState = rememberDrawerState(
         initialValue = DrawerValue.Closed
     )
