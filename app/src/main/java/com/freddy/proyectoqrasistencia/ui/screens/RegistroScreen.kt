@@ -70,6 +70,7 @@ fun RegistroScreen(modifier: Modifier = Modifier) {
     }
 }
 
+
 @Composable
 fun Titulo() {
     Box(

@@ -74,6 +74,13 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
+    implementation("androidx.appcompat:appcompat:1.3.1")  // Puede ser útil en algunos casos
+    implementation("androidx.core:core-ktx:1.6.0")      // Dependencia de AndroidX core
+
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx)
+
+
     // Optional: Add the AppCompat library explicitly in case the import doesn't resolve
 
 }
