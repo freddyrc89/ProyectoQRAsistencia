@@ -45,7 +45,7 @@ interface ApiService {
             CoroutineScope(Dispatchers.IO).launch {
                 var resultado: Alumno? = null
                 var requiereReintento = false
-                repeat(MAX_INTENTOS){ intento->
+                repeat(MAX_INTENTOS){ intento-> //Mejorar logica porque se repite 3 veces
                     try {
                         resultado = apiService.obtenerAlumno(dni)
                         withContext(Dispatchers.Main) {
