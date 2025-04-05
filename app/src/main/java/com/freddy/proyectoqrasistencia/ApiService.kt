@@ -49,8 +49,11 @@ interface ApiService {
                     try {
                         resultado = apiService.obtenerAlumno(dni)
                         withContext(Dispatchers.Main) {
+                            Log.v("Logica_API","Alumno obtenido")
                             callback(resultado) //  Devuelve el objeto a `MainActivity`
                         }
+                        return@launch
+
                     } catch (e: HttpException) {
                         Log.e("API_ERROR", "Error en la solicitudddd: ${e.message()}")
                     } catch (e: Exception) {
@@ -59,7 +62,9 @@ interface ApiService {
                     delay(RETRY_DELAY)
                 }
                 requiereReintento = true
-                withContext(Dispatchers.Main) { callback(null) }
+                withContext(Dispatchers.Main) {
+                    callback(null)
+                }
             }
         }
         fun enviarDatosQR(dni: Int, estadoQR: Boolean, callback: (Boolean) -> Unit) {

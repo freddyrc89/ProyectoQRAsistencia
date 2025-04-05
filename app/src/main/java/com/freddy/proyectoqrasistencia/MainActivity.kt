@@ -44,6 +44,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val viewModel: QRViewModel = viewModel()
+            LaunchedEffect(Unit) {
+                viewModel.cargarAlumno("7779991")
+            }
             QRScreen(viewModel)
         }
     }
@@ -56,8 +59,7 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
     val alumno by viewModel.alumno.collectAsState()
     var qrBitmap by remember { mutableStateOf<Bitmap?>(null) }
     alumno?.let { qrBitmap = generarQR(it.dni) }
-    viewModel.cargarAlumno("7779991")//actualmente no se guarda con la vista ||modificar esto
-    //URGENTE MEJORAR LA LOGICA CON LOS DNI
+
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -77,7 +79,28 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            if (!showQR) {
+                Button(
+                    onClick = {
+                        viewModel.startCountdown()
+                        viewModel.enviarDatosQR() // Enviar datos al API al generar QR
+
+                    },
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .height(50.dp)
+                        .width(200.dp)
+                ) {
+                    Text("Generar QR", fontSize = 18.sp, color= Color.White)
+                }
+            } else {
+
                 Card(
                     shape = RoundedCornerShape(16.dp),
                     elevation = 8.dp,
@@ -100,25 +123,7 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
                         }
                     }
                 }
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            if (!showQR) {
-                Button(
-                    onClick = {
-                        viewModel.startCountdown()
-                        viewModel.enviarDatosQR() // Enviar datos al API al generar QR
-                    },
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .height(50.dp)
-                        .width(200.dp)
-                ) {
-                    Text("Generar QR", fontSize = 18.sp, color= Color.White)
-                }
-            } else {
+                Spacer(modifier = Modifier.height(12.dp))
                 Card(
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
@@ -141,6 +146,7 @@ fun QRScreen(viewModel: QRViewModel = viewModel()) {
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 Button(onClick = {viewModel.detener()}) {
+//                    viewModel.cargarAlumno("7779991")//cargar en el view model el alumno
                     Text("Detener conteo", color= Color.White)
                 }
             }
