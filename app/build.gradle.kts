@@ -77,10 +77,8 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7") // Usar la version mas reciente
 
     implementation("nl.dionsegijn:konfetti-compose:2.0.5") // Usa la version mas reciente
-<<<<<<< Updated upstream
-}
-=======
     implementation("com.google.code.gson:gson:2.10.1")
-    }
->>>>>>> Stashed changes
+
+}
+
 
